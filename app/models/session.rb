@@ -21,6 +21,7 @@ class Session < ActiveRecord::Base
     if session
       session.refresh
       session.save!
+      session
     else
       Session.create(user: user, user_agent: user_agent)
     end
@@ -32,7 +33,11 @@ class Session < ActiveRecord::Base
     self
   end
 
+  def expired
+    update_attributes(expired_at: Time.now)
+  end
+
   def expired?
-    expired_at == nil || expired_at > Time.now
+    expired_at == nil || expired_at < Time.now
   end
 end

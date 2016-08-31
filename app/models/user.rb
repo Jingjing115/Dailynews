@@ -22,9 +22,10 @@ class User < ActiveRecord::Base
   end
 
   def self.change_pwd params
-    return 'user not found' unless user = User.find_by(params[:email])
+    return 'user not found' unless user = User.find_by(email:params[:email])
     return 'wrong password' unless user.password == params[:password]
     user.update_attributes(password: params[:new_password])
+    user.sessions.select{|s|!s.expired?}.map(&:expired)
     user.reload
   end
 
