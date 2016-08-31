@@ -34,7 +34,7 @@ class Session < ActiveRecord::Base
   end
 
   def expired
-    self.update_attributes(expired_at: Time.now - 1.hour)
+    self.update_attributes(expired_at: Time.now)
   end
 
   def expired?
