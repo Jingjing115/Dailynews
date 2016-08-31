@@ -1,29 +1,38 @@
 class Session < ActiveRecord::Base
   belongs_to :user
-  before_save :generate_session_id
+  before_create :refresh
 
-  def generate_session_id
-    session_id = SecureRandom.hex(16)
-    generate_session_id if Session.find_by_session_id(session_id)
-    expired_at = Time.now + 30.days
+  def generate_session_id(secure_session = SecureRandom.hex(16))
+    return secure_session if Session.where(session_id: secure_session).first.blank?
+    generate_session_id
+  end
+
+  def self.find_by_auth_header session_id
+    session = Session.find_by_session_id(session_id)
+    if session && !session.expired?
+      session
+    else
+      nil
+    end
   end
 
   def self.generate user, user_agent
     session = Session.find_by(user_agent: user_agent, user: user)
     if session
       session.refresh
+      session.save!
     else
-      Session.create(user: user)
+      Session.create(user: user, user_agent: user_agent)
     end
   end
 
   def refresh
-    generate_session_id
-    save
-    reload
+    self.session_id = generate_session_id
+    self.expired_at = Time.now + 30.days
+    self
   end
 
   def expired?
-    expired_at > Time.now
+    expired_at == nil || expired_at > Time.now
   end
 end
