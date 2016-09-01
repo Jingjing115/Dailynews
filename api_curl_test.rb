@@ -12,7 +12,7 @@ curl -X PUT --data email=zhuguo@huantengsmart.com \
 --data new_password=zhuguo1211 \
 localhost:3000/api/users/change_pwd.json
 
-curl -X POST --header "Authorization: ae31f39fe1229f3ffbe773b98b59ceb1" \
+curl -X POST --header "Authorization: fae5df2f3620cf9ec14919f11f223140" \
 --data title=test title \
 --data content=test content \
 localhost:3000/api/blogs.json

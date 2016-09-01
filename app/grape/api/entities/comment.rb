@@ -6,9 +6,13 @@ module API
         type: "Integer",
         desc: "设备标识字符串 cf. 总则§2.3",
       }
-      expose :id, :documentation => {
+      expose :user_id, :documentation => {
         type: "Integer",
         desc: "评论者ID"
+      }
+      expose :created_at, :documentation => {
+        type: "Date",
+        desc: "评论时间"
       }
       expose :user_name, :documentation => {
         type: "String",

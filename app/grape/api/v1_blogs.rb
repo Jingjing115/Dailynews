@@ -27,11 +27,15 @@ module API
 
       desc '获取所有blog'
       params do
-        optional :page_size, type: Integer, desc: '每页容量', default: 10
-        optional :page_num, type: Integer, desc: '页数', default: 1
+        optional :per_page, type: Integer, desc: '每页容量', default: 10
+        optional :page, type: Integer, desc: '页数', default: 1
+        optional :key_words, type: String, desc: '搜索关键词', default: ''
+        optional :release_date, type: String, desc: '发布日期精确到日 如2016-08-08', default: ''
       end
       get do
-        blogs = Blog.all
+        release_date = params[:release_date].to_date
+        blogs = Blog.where("title LIKE '%#{params[:key_words]}%' or content LIKE '%#{params[:key_words]}%'").paginate(page: params[:page],per_page: params[:per_page])
+        blogs = blogs.where(created_at: params[:release_date].to_date.beginning_of_day..params[:release_date].to_date.end_of_day) if release_date
         present :success, true
         present :blogs, blogs, with: API::Entities::Blog
       end
@@ -41,6 +45,7 @@ module API
         requires :id, type: Integer, desc: 'blogID'
       end
       get '/:id' do
+        blog.update_attributes(click_times: blog.click_times + 1)
         op_result blog
       end
 

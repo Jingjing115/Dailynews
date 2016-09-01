@@ -16,6 +16,14 @@ module API
       } do |instance, options|
         instance.user.name
       end
+      expose :click_times, :documentation => {
+        type: "Integer",
+        desc: "点击量"
+      }
+      expose :created_at, :documentation => {
+        type: "Date",
+        desc: "发布时间"
+      }
       expose :"title", :documentation => {
         type: "String",
         desc: '标题',
