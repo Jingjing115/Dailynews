@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :sessions
   has_many :blogs
   has_many :comments
+  has_many :dailies
 
   def self.login params
     return 'user not found' unless user = User.find_by(email: params[:email])

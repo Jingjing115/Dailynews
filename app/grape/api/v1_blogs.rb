@@ -12,6 +12,14 @@ module API
         Blog.find_by(id: params[:id]) || error!({error: "blog not found"}, 404)
       end
 
+      def comment
+        Comment.find_by(id: params[:id]) || error!({error: "comment not found"}, 404)
+      end
+
+      def my_blog
+        current_user.blogs.find_by(id: params[:id]) || error!({error: "blog not found"}, 404)
+      end
+
       def op_result result
         if result.is_a? String
           error!({error: result}, 400)
@@ -33,9 +41,10 @@ module API
         optional :release_date, type: String, desc: '发布日期精确到日 如2016-08-08', default: ''
       end
       get do
-        release_date = params[:release_date].to_date
-        blogs = Blog.where("title LIKE '%#{params[:key_words]}%' or content LIKE '%#{params[:key_words]}%'").paginate(page: params[:page],per_page: params[:per_page])
-        blogs = blogs.where(created_at: params[:release_date].to_date.beginning_of_day..params[:release_date].to_date.end_of_day) if release_date
+        release_date = params[:release_date].to_date || Time.now.to_date
+        blogs = Blog.where("title LIKE '%#{params[:key_words]}%' or content LIKE '%#{params[:key_words]}%'")
+        blogs = blogs.where(created_at: release_date.beginning_of_day..release_date.end_of_day) unless params[:key_words]
+        blogs = blogs.paginate(page: params[:page],per_page: params[:per_page])
         present :success, true
         present :blogs, blogs, with: API::Entities::Blog
       end
@@ -61,11 +70,26 @@ module API
       desc '添加评论'
       params do
         requires :id, type: Integer, desc: 'blogID'
-        requires :content, type: String, desc: '内容'
+        requires :content, type: String, desc: '评论内容'
       end
       post '/:id/comments' do
-        blog.comments.create(user: current_user, blog: blog, content: params[:content])
-        op_result blog.reload
+        comment = blog.comments.create(user: current_user, blog: blog, content: params[:content])
+        present :success,true
+        present :comment, comment, with: API::Entities::Comment
+      end
+    end
+
+    resource :comments do
+
+      desc '回复评论'
+      params do
+        requires :id, type: Integer, desc: 'commentID'
+        requires :content, type: String, desc: '回复内容'
+      end
+      post '/:id/relys' do
+        reply = comment.relys.create(user: current_user, blog: comment.blog, content: params[:content])
+        present :success,true
+        present :reply, reply, with: API::Entities::Comment
       end
     end
   end
