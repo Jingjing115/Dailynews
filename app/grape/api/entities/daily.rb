@@ -18,6 +18,18 @@ module API
       } do |instance, options|
         instance.user.name
       end
+      expose :own, :documentation => {
+        type: "Boolean",
+        desc: "是不是自己的晨报",
+      } do |instance, options|
+        options[:user] == instance.user
+      end
+      expose :today, :documentation => {
+        type: "Boolean",
+        desc: "是不是当天的晨报"
+      } do |instance, options|
+        instance.created_at.to_date == Time.now.to_date
+      end
       expose :created_at, :documentation => {
         type: "Date",
         desc: "发布时间"
