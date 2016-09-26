@@ -97,7 +97,7 @@ module API
         requires :permission_id, type: Integer, desc: 'permissionID'
       end
       put '/:id/permissions/:permission_id' do
-        user_group.users << (User.find_by(id: params[:permission_id]) || error!({error: 'permission not found'}, 404))
+        user_group.permissions << (Permission.find_by(id: params[:permission_id]) || error!({error: 'permission not found'}, 404))
         present :success, true
         present :user_group, user_group.reload, with: API::Entities::UserGroup
       end

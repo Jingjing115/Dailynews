@@ -80,3 +80,7 @@ curl -X POST --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
 --data name=晨报权限 \
 --data description=添加查看晨报 \
 localhost:3000/api/permissions
+###添加权限到用户组
+curl -X PUT --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+--data permission_id=2 \
+localhost:3000/api/user_groups/1/permissions/2
