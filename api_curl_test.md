@@ -48,3 +48,35 @@ localhost:3000/api/dailies.json
 curl -X PUT --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
 --data content=test content \
 localhost:3000/api/dailies.json
+###获取所有用户组
+curl -X GET --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+localhost:3000/api/user_groups
+###获取某个用户组
+curl -X GET --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+localhost:3000/api/user_groups/1
+###创建一个用户组
+curl -X POST --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+--date name= \
+--data description= \
+localhost:3000/api/user_groups
+###更新某个用户组
+curl -X PUT --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+--date name= \
+--data description= \
+localhost:3000/api/user_groups/1
+###删除某个用户组
+curl -X DELETE --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+localhost:3000/api/user_groups/1
+###添加用户到用户组
+curl -X PUT --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+--data user_id=2 \
+localhost:3000/api/user_groups/1/users/2
+###删除用户组中的用户
+curl -X DELETE --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+localhost:3000/api/user_groups/1/users/2
+###添加权限
+curl -X POST --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+--data code=daily \
+--data name=晨报权限 \
+--data description=添加查看晨报 \
+localhost:3000/api/permissions

@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :blogs
   has_many :comments
   has_many :dailies
+  has_and_belongs_to_many :user_groups
 
   def self.login params
     return 'user not found' unless user = User.find_by(email: params[:email])
@@ -28,6 +29,14 @@ class User < ActiveRecord::Base
     user.update_attributes(password: params[:new_password])
     user.sessions.select{|s|!s.expired?}.map(&:expired)
     user.reload
+  end
+
+  def has_perm? code
+    user_groups.each do |ug|
+      return true if ug.has_perm?('administrator')
+      return true if ug.has_perm?(code.to_s)
+    end
+    false
   end
 
 end

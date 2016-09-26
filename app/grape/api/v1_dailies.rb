@@ -27,9 +27,9 @@ module API
 
     end
 
-    # before do
-    #   current_user.has_perm? :daily
-    # end
+    before do
+      current_user.has_perm? :daily
+    end
 
     resource :dailies do
 
