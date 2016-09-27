@@ -36,7 +36,7 @@ module API
       }
       expose :comments,:documentation => {
         type: "Array",
-        desc: '评论'
+        desc: '评论与回复'
       }, with: API::Entities::Comment
     end
   end

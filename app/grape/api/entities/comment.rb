@@ -26,7 +26,7 @@ module API
         type: "String",
         desc: "评论或回复"
       } do |instance, options|
-        instance.source.present? ? '回复' : '评论'
+        instance.source.present? ? 'comment' : 'reply'
       end
       expose :source_user_name, :documentation => {
         type: "String",
