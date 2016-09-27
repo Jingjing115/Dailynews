@@ -9,7 +9,7 @@ class Session < ActiveRecord::Base
   def self.generate user, user_agent
     session = Session.find_or_create_by(user_agent: user_agent, user: user)
     session.update_attributes(session_id: session.generate_session_id, expired_at: Time.now + 30.days)
-    reload
+    session
   end
 
   def expired

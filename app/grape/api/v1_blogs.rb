@@ -86,8 +86,8 @@ module API
         requires :id, type: Integer, desc: 'commentID'
         requires :content, type: String, desc: '回复内容'
       end
-      post '/:id/relys' do
-        reply = comment.relys.create(user: current_user, blog: comment.blog, content: params[:content])
+      post '/:id/replys' do
+        reply = comment.replys.create(user: current_user, blog: comment.blog, content: params[:content])
         present :success,true
         present :reply, reply, with: API::Entities::Comment
       end
