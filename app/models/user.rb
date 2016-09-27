@@ -8,15 +8,19 @@ class User < ActiveRecord::Base
 
   def self.login params
     return 'user not found' unless user = User.find_by(email: params[:email])
-    return 'wrong password' unless user.password == params[:password]
+    return 'wrong password' unless user.password == Digest::MD5.hexdigest(params[:password])
     Session.generate user, params[:user_agent]
+  end
+
+  def self.find_by_auth_header auth_header
+    ((session = Session.find_by(session_id: auth_header)) && !session.expired?) ? session.user : nil
   end
 
   def self.regist params
     return 'invalid email' unless is_a_valid_email? params[:email]
     return 'this email already exist' if User.find_by(email: params[:email])
     return 'this name already exist' if User.find_by(name: params[:name])
-    User.create(email: params[:email], password: params[:password], name: params[:name])
+    User.create(email: params[:email], password: Digest::MD5.hexdigest(params[:password]), name: params[:name])
   end
 
   def self.is_a_valid_email? email
@@ -25,8 +29,8 @@ class User < ActiveRecord::Base
 
   def self.change_pwd params
     return 'user not found' unless user = User.find_by(email:params[:email])
-    return 'wrong password' unless user.password == params[:password]
-    user.update_attributes(password: params[:new_password])
+    return 'wrong password' unless user.password == Digest::MD5.hexdigest(params[:password])
+    user.update_attributes(password: Digest::MD5.hexdigest(params[:new_password]))
     user.sessions.select{|s|!s.expired?}.map(&:expired)
     user.reload
   end
