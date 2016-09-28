@@ -32,7 +32,7 @@ curl -X POST --header "Authorization: 329049759f37016bb04586a8d3a61d0f" \
 --data content=test reply \
 localhost:3000/api/comments/3/replys.json
 ###获取所有daily
-curl -X GET --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+curl -X GET --header "Authorization: 329049759f37016bb04586a8d3a61d0f" \
 --data release_date=2016-09-22 \
 localhost:3000/api/dailies.json
 ###获取一条daily
@@ -47,14 +47,14 @@ curl -X PUT --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
 --data content=test content \
 localhost:3000/api/dailies.json
 ###获取所有用户组
-curl -X GET --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
+curl -X GET --header "Authorization: 329049759f37016bb04586a8d3a61d0f" \
 localhost:3000/api/user_groups
 ###获取某个用户组
 curl -X GET --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
 localhost:3000/api/user_groups/1
 ###创建一个用户组
 curl -X POST --header "Authorization: a1132f22df11e0e1047b55c338d6e8c0" \
---date name= \
+--date name=phantom group \
 --data description= \
 localhost:3000/api/user_groups
 ###更新某个用户组

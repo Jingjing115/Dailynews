@@ -28,7 +28,7 @@ module API
     end
 
     before do
-      current_user.has_perm? :daily
+      error!({error: 'have no permission'}, 403) unless current_user.has_perm? :daily
     end
 
     resource :dailies do
