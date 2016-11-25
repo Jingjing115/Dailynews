@@ -53,7 +53,7 @@ module API
       put '/:id' do
         my_today_daily.update_attributes(content: params[:content])
         present :success, true
-        present :daily my_today_daily, with: API::Entities::Daily, user: current_user
+        present :daily, my_today_daily, with: API::Entities::Daily, user: current_user
       end
 
       desc '写daily'
