@@ -2,16 +2,16 @@
 curl -X POST --data email=zg@huantengsmart.com \
 --data password=zhuguo1211 \
 --data name=zhuguo \
-localhost:3000/api/users/regist.json
+localhost:3000/api/user/regist.json
 ###登陆
 curl -X POST --data email=zg@huantengsmart.com \
 --data password=zhuguo1211 \
-localhost:3000/api/users/login.json
+localhost:3000/api/user/login.json
 ###修改密码
 curl -X PUT --data email=zhuguo@huantengsmart.com \
 --data password=zhuguo \
 --data new_password=zhuguo1211 \
-localhost:3000/api/users/change_pwd.json
+localhost:3000/api/user/change_pwd.json
 ###发布一条blog
 curl -X POST --header "Authorization: 329049759f37016bb04586a8d3a61d0f" \
 --data title=test title \
@@ -19,6 +19,7 @@ curl -X POST --header "Authorization: 329049759f37016bb04586a8d3a61d0f" \
 localhost:3000/api/blogs.json
 ###获取所有blog
 curl -X GET \
+--data per_page=30 \
 localhost:3000/api/blogs.json
 ###获取一条blog
 curl -X GET --data id=1 \

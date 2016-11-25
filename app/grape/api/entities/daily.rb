@@ -6,17 +6,14 @@ module API
         type: "Integer",
         desc: "dailyID",
       }
-      expose :author_id, :documentation => {
-        type: "Integer",
-        desc: "发布者ID"
+      expose :author, :documentation => {
+        type: "Hash",
+        desc: "发布者信息"
       } do |instance, options|
-        instance.user.id
-      end
-      expose :author_name, :documentation => {
-        type: "String",
-        desc: "发布者姓名",
-      } do |instance, options|
-        instance.user.name
+        {
+          id: instance.user.id,
+          name: instance.user.name
+        }
       end
       expose :own, :documentation => {
         type: "Boolean",

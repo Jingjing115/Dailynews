@@ -10,15 +10,14 @@ module API
         type: "String",
         desc: "session_id",
       }
-      expose :user_id, :documentation => {
-        type: "Integer",
-        desc: "用户ID",
-      }
-      expose :user_name, :documentation => {
-        type: "String",
-        desc: "用户姓名"
+      expose :user, :documentation => {
+        type: "Hash",
+        desc: "用户"
       } do |instance, options|
-        instance.user.name
+        {
+          id: instance.user.id,
+          name: instance.user.name
+        }
       end
     end
   end

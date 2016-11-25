@@ -10,42 +10,36 @@ module API
         type: "Integer",
         desc: "blogID"
       }
-      expose :author_id, :documentation => {
-        type: "Integer",
-        desc: "评论者ID"
+      expose :author, :documentation => {
+        type: "Hash",
+        desc: "发布者信息"
       } do |instance, options|
-        instance.user.id
-      end
-      expose :author_name, :documentation => {
-        type: "Integer",
-        desc: "评论者name"
-      } do |instance, options|
-        instance.user.name
+        {
+          id: instance.user.id,
+          name: instance.user.name
+        }
       end
       expose :type, :documentation => {
         type: "String",
         desc: "评论或回复"
       } do |instance, options|
-        instance.source.present? ? 'comment' : 'reply'
+        instance.source.present? ? 'reply' : 'comment'
       end
-      expose :source_user_name, :documentation => {
+      expose :source, :documentation => {
         type: "String",
         desc: "回复对象",
       }, if: lambda { |instance, options|
         instance.source.present?
       } do |instance, options|
-        instance.source.user.name
+        {
+          id: instance.source.id,
+          content: instance.source.content
+        }
       end
       expose :created_at, :documentation => {
         type: "Date",
         desc: "评论时间"
       }
-      expose :user_name, :documentation => {
-        type: "String",
-        desc: "评论者姓名",
-      } do |instance, options|
-        instance.user.name
-      end
       expose :content, :documentation => {
         type: "Text",
         desc: "内容",

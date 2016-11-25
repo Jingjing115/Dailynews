@@ -2,10 +2,6 @@ module API
   class V1Dashboard < Grape::API
     helpers API::Helpers::Authentication
 
-    version 'v1', using: :header, vendor: 'huantengsmart'
-    format :json
-    prefix :api
-
     helpers do
       def user_group
         UserGroup.find_by(id: params[:id]) || error!({error: 'user group not found'}, 404)
@@ -21,7 +17,6 @@ module API
     end
 
     resource :user_groups do
-
       desc '获取所有user_group'
       get do
         present :success, true
@@ -115,7 +110,6 @@ module API
     end
 
     resource :permissions do
-
       desc '获取所有permission'
       get do
         present :success, true

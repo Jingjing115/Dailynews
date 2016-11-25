@@ -2,12 +2,7 @@ module API
   class V1Dailies < Grape::API
     helpers API::Helpers::Authentication
 
-    version 'v1', using: :header, vendor: 'huantengsmart'
-    format :json
-    prefix :api
-
     helpers do
-
       def daily
         Daily.find_by(id: params[:id]) || error!({error: "daily not found"}, 404)
       end
@@ -15,16 +10,6 @@ module API
       def my_today_daily
         current_user.dailies.find_by(id: params[:id], created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day) || error!({error: "daily not found"}, 404)
       end
-
-      def op_result result
-        if result.is_a? String
-          error!({error: result}, 400)
-        elsif result.is_a? Daily
-          present :success, true
-          present :daily, result, with: API::Entities::Daily, user: current_user
-        end
-      end
-
     end
 
     before do
@@ -32,7 +17,6 @@ module API
     end
 
     resource :dailies do
-
       desc '获取所有daily'
       params do
         optional :per_page, type: Integer, desc: '每页容量', default: 10
@@ -57,7 +41,8 @@ module API
         requires :id, type: Integer, desc: 'dailyID'
       end
       get '/:id' do
-        op_result daily
+        present :success, true
+        present :daily, daily, with: API::Entities::Daily, user: current_user
       end
 
       desc '修改自己当天的daily'
@@ -67,17 +52,24 @@ module API
       end
       put '/:id' do
         my_today_daily.update_attributes(content: params[:content])
-        op_result daily.reload
+        present :success, true
+        present :daily my_today_daily, with: API::Entities::Daily, user: current_user
       end
 
-      desc '发布daily'
+      desc '写daily'
       params do
         requires :content, type: String, desc: '内容'
       end
       post do
-        op_result Daily.create(user: current_user, content: params[:content])
+        new_daily = current_user.dailies.find_by(id: params[:id], created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day)
+        if new_daily
+          new_daily.update_attributes(content: params[:content])
+        else
+          new_daily = Daily.create(user: current_user, content: params[:content])
+        end
+        present :success, true
+        present :daily, new_daily, with: API::Entities::Daily, user: current_user
       end
-
     end
   end
 end

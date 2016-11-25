@@ -1,13 +1,7 @@
 module API
   class V1Blogs < Grape::API
     helpers API::Helpers::Authentication
-
-    version 'v1', using: :header, vendor: 'huantengsmart'
-    format :json
-    prefix :api
-
     helpers do
-
       def blog
         Blog.find_by(id: params[:id]) || error!({error: "blog not found"}, 404)
       end
@@ -15,27 +9,12 @@ module API
       def comment
         Comment.find_by(id: params[:id]) || error!({error: "comment not found"}, 404)
       end
-
-      def my_blog
-        current_user.blogs.find_by(id: params[:id]) || error!({error: "blog not found"}, 404)
-      end
-
-      def op_result result
-        if result.is_a? String
-          error!({error: result}, 400)
-        elsif result.is_a? Blog
-          present :success, true
-          present :blog, result, with: API::Entities::Blog
-        end
-      end
-
     end
 
     resource :blogs do
-
       desc '获取所有blog'
       params do
-        optional :per_page, type: Integer, desc: '每页容量', default: 10
+        optional :per_page, type: Integer, desc: '每页容量', default: 10, values: 10..20
         optional :page, type: Integer, desc: '页数', default: 1
         optional :key_words, type: String, desc: '搜索关键词', default: ''
         optional :release_date, type: String, desc: '发布日期精确到日 如2016-08-08', default: ''
@@ -47,6 +26,9 @@ module API
         blogs = blogs.paginate(page: params[:page],per_page: params[:per_page])
         present :success, true
         present :blogs, blogs, with: API::Entities::Blog
+        present :current_page, params[:page]
+        present :page_count, ((blogs.count - 1) / params[:per_page]) + 1
+        present :page_size, params[:per_page]
       end
 
       desc '获取某条blog'
@@ -55,7 +37,8 @@ module API
       end
       get '/:id' do
         blog.update_attributes(click_times: blog.click_times + 1)
-        op_result blog
+        present :success, true
+        present :blog, blog, with: API::Entities::Blog
       end
 
       desc '发布blog'
@@ -64,7 +47,8 @@ module API
         requires :content, type: String, desc: '内容'
       end
       post do
-        op_result Blog.create(user: current_user, title: params[:title], content: params[:content])
+        present :success, true
+        present :blog, Blog.create(user: current_user, title: params[:title], content: params[:content]), with: API::Entities::Blog
       end
 
       desc '添加评论'
@@ -80,7 +64,6 @@ module API
     end
 
     resource :comments do
-
       desc '回复评论'
       params do
         requires :id, type: Integer, desc: 'commentID'
