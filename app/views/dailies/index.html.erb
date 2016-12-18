@@ -2,106 +2,35 @@
     <%= stylesheet_link_tag 'css/styles.css' %>
     <%= stylesheet_link_tag 'css/bootstrap/css/bootstrap.min.css' %>
 <% end %>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html">首页</a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <%= link_to('注销', destroy_user_session_path, :method => :delete) %>
-                </li>
-                <li>
-                    <%= link_to "修改密码", edit_user_registration_path %>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<%= render 'header' %>
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
-            <h1 class="page-header">
-                <%= "#{Time.now.to_date}" %><small>日报</small>
-            </h1>
-            <% @dailies.each do |daily| %>
-              <h3><%= daily.user.name %>&nbsp;&nbsp;<small><%= "#{daily.created_at}" %></small></h3>
-              <hr>
-              <p><%= daily.content %></p>
-              <a class="btn btn-primary" href="show">更多</a>
-              <hr>
-            <% end %>
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="well">
+              <h1 class="page-header">
+                  <%= "#{Time.now.to_date}日报" %>
+              </h1>
+              <form role="form" action="dailies" method="get">
+                <div class="form-group">
+                  <input name="date" placeholder="请输入日期" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">查看</button>
+              </form>
+              <% @dailies.each do |daily| %>
+                <h3><%= daily.user.name %>&nbsp;&nbsp;<small><%= "#{daily.created_at}" %></small></h3>
+                <h4><%= daily.title%></h4>
+                <p><%= daily.content %></p>
+                <hr>
+              <% end %>
+            </div>
             <ul class="pager">
                 <li class="previous">
-                    <a href="#">&larr; 上一页</a>
+                    <a href="<%= "/?current_page=#{@current_page - 1}" %>">&larr; 上一页</a>
                 </li>
                 <li class="next">
-                    <a href="#">下一页 &rarr;</a>
+                    <a href="<%= "/?current_page=#{@current_page + 1}" %>">下一页 &rarr;</a>
                 </li>
             </ul>
         </div>
-        <div class="col-md-4">
-            <div class="well">
-                <h4>Blog Search</h4>
-                <div class="input-group">
-                    <input type="text" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                    </span>
-                </div>
-            </div>
-            <div class="well">
-                <h4>Blog Categories</h4>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-6">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="well">
-                <h4>Side Widget Well</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
-            </div>
-
-        </div>
-
     </div>
-    <hr>
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p>Copyright &copy; Your Website 2014</p>
-            </div>
-        </div>
-    </footer>
 </div>

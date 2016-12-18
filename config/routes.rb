@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     registrations: 'registrations',
   }
   root 'dailies#index'
+  resources :dailies
+  get 'my_today_daily' => 'dailies#my_today_daily', as: :my_today_daily
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

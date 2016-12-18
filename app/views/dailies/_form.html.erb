@@ -1,0 +1,8 @@
+<%= form_for @daily do |f| %>
+  <div class="form-group">
+    <%= f.select(:spec_type, options_for_select([['普通日报', 1], ['周度目标', 2], ['季度目标', 3],['年度目标', 4]]), {}, {class: "form-group form-control"}) %>
+    <%= f.text_field :title, :placeholder => "请输入标题", class: "form-control" %>
+    <%= f.text_area :content, :placeholder => "请输入日报内容", class: "form-control", rows: "20" %>
+  </div>
+  <%= f.submit "提交", class: "btn btn-primary" %>
+<% end %>
