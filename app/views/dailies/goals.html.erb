@@ -1,0 +1,36 @@
+<%= render 'header' %>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <div class="well">
+        <h1 class="page-header">
+          年度目标
+        </h1>
+        <% @year_goals.each do |g| %>
+          <h3><%= g.user.name %></h3>
+          <h4><%= g.title%></h4>
+          <p><%= g.content %></p>
+          <hr>
+        <% end %>
+        <h1 class="page-header">
+          季度目标
+        </h1>
+        <% @quarter_goals.each do |g| %>
+          <h3><%= g.user.name %></h3>
+          <h4><%= g.title%></h4>
+          <p><%= g.content %></p>
+          <hr>
+        <% end %>
+        <h1 class="page-header">
+          月度目标
+        </h1>
+        <% @month_goals.each do |g| %>
+          <h3><%= g.user.name %></h3>
+          <h4><%= g.title%></h4>
+          <p><%= g.content %></p>
+          <hr>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

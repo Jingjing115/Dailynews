@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   }
   root 'dailies#index'
   resources :dailies
-  get 'my_today_daily' => 'dailies#my_today_daily', as: :my_today_daily
+  get 'goals' => 'dailies#goals'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

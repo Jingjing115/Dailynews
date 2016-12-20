@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218051224) do
+ActiveRecord::Schema.define(version: 20161219082603) do
 
   create_table "blogs", force: :cascade do |t|
     t.integer  "user_id",                 null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20161218051224) do
     t.datetime "updated_at",             null: false
     t.string   "title"
     t.integer  "spec_type",  default: 1
+    t.string   "goal_info"
   end
 
   create_table "permissions", force: :cascade do |t|
