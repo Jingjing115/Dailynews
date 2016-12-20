@@ -237,7 +237,7 @@ DEPENDENCIES
   grape-swagger (~> 0.10.2)
   jbuilder (~> 2.0)
   jquery-rails
-  mysql2
+  mysql2 (>= 0.3.18, < 0.5)
   puma (~> 3.6.0)
   rails (= 4.2.6)
   sass-rails (~> 5.0)
