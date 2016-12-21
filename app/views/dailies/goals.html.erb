@@ -9,7 +9,7 @@
         <% @year_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
           <h4><%= g.title%></h4>
-          <p><%= g.content %></p>
+          <p><%= $markdown.render(g.content).html_safe %></p>
           <hr>
         <% end %>
         <h1 class="page-header">
@@ -18,7 +18,7 @@
         <% @quarter_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
           <h4><%= g.title%></h4>
-          <p><%= g.content %></p>
+          <p><%= $markdown.render(g.content).html_safe %></p>
           <hr>
         <% end %>
         <h1 class="page-header">
@@ -27,7 +27,7 @@
         <% @month_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
           <h4><%= g.title%></h4>
-          <p><%= g.content %></p>
+          <p><%= $markdown.render(g.content).html_safe %></p>
           <hr>
         <% end %>
       </div>

@@ -9,7 +9,7 @@
         <% @dailies.each do |daily| %>
           <h3><%= daily.user.name %>&nbsp;&nbsp;<small><%= "#{daily.created_at}" %></small></h3>
           <h4><%= daily.title%></h4>
-          <p><%= daily.content %></p>
+          <p><%= $markdown.render(daily.content).html_safe %></p>
           <hr>
         <% end %>
       </div>

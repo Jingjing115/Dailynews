@@ -23,5 +23,6 @@ module PhantomBlog
     config.time_zone = 'Beijing'
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    $markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, quote: true, footnotes: true)
   end
 end
