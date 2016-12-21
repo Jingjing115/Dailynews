@@ -1,6 +1,8 @@
 class DailiesController < ApplicationController
   before_filter :authenticate_user!
 
+  BackwardsTime = 6.hours
+
   def goals
     time = Time.now
     @month_goals = Daily.month_goal.where(goal_info: "#{time.year}-#{time.month}")
@@ -15,11 +17,11 @@ class DailiesController < ApplicationController
     rescue
       @date = Time.now.to_date
     end
-    @dailies = Daily.daily.where(created_at: @date.beginning_of_day..@date.end_of_day)
+    @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
   end
 
   def new
-    @daily = Daily.daily.where(user_id: current_user.id, created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day).first
+    @daily = Daily.daily.where(user_id: current_user.id, created_at: (Time.now.to_date.beginning_of_day + BackwardsTime)..(Time.now.to_date.end_of_day + BackwardsTime)).first
     if @daily
       render 'edit'
     else
@@ -28,14 +30,14 @@ class DailiesController < ApplicationController
   end
 
   def edit
-  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day).first
+  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: (Time.now.to_date.beginning_of_day + BackwardsTime)..(Time.now.to_date.end_of_day + BackwardsTime)).first
 	end
 
   def update
     @daily = Daily.daily.find(params[:id])
     if @daily.update(daily_params)
       @date = Time.now.to_date
-      @dailies = Daily.daily.where(created_at: @date.beginning_of_day..@date.end_of_day)
+      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
       render 'index'
     else
       render 'edit'
@@ -47,7 +49,7 @@ class DailiesController < ApplicationController
     @daily.user_id = current_user.id
     if @daily.save
       @date = Time.now.to_date
-      @dailies = Daily.daily.where(created_at: @date.beginning_of_day..@date.end_of_day)
+      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
       render 'index'
     else
       render 'new'
