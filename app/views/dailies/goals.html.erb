@@ -3,8 +3,9 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <div class="well">
-        <h1 class="page-header">
+        <h1 class="text-center">
           年度目标
+          <hr>
         </h1>
         <% @year_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
@@ -12,18 +13,20 @@
           <p><%= $markdown.render(g.content).html_safe %></p>
           <hr>
         <% end %>
-        <h1 class="page-header">
+        <h1 class="text-center">
           季度目标
         </h1>
+        <hr>
         <% @quarter_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
           <h4><%= g.title%></h4>
           <p><%= $markdown.render(g.content).html_safe %></p>
           <hr>
         <% end %>
-        <h1 class="page-header">
+        <h1 class="text-center">
           月度目标
         </h1>
+        <hr>
         <% @month_goals.each do |g| %>
           <h3><%= g.user.name %></h3>
           <h4><%= g.title%></h4>
