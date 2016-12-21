@@ -5,9 +5,9 @@ class DailiesController < ApplicationController
 
   def goals
     time = Time.now
-    @month_goals = Daily.month_goal.where(goal_info: "#{time.year}-#{time.month}")
-    @quarter_goals = Daily.quarter_goal.where(goal_info: "#{time.year}-#{((time.month - 1) / 3) + 1}")
-    @year_goals = Daily.year_goal.where(goal_info: "#{time.year}")
+    @month_goals = Daily.month_goal.where(goal_info: "#{time.year}-#{time.month}").order(created_at: :desc)
+    @quarter_goals = Daily.quarter_goal.where(goal_info: "#{time.year}-#{((time.month - 1) / 3) + 1}").order(created_at: :desc)
+    @year_goals = Daily.year_goal.where(goal_info: "#{time.year}").order(created_at: :desc)
     render 'goals'
   end
 
@@ -17,7 +17,7 @@ class DailiesController < ApplicationController
     rescue
       @date = Time.now.to_date
     end
-    @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
+    @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
   end
 
   def new
@@ -37,7 +37,7 @@ class DailiesController < ApplicationController
     @daily = Daily.daily.find(params[:id])
     if @daily.update(daily_params)
       @date = Time.now.to_date
-      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
+      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
       render 'edit'
@@ -49,7 +49,7 @@ class DailiesController < ApplicationController
     @daily.user_id = current_user.id
     if @daily.save
       @date = Time.now.to_date
-      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime))
+      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
       render 'new'
