@@ -13,9 +13,9 @@ class DailiesController < ApplicationController
 
   def index
     begin
-      @date = params[:date].to_date || Time.now.to_date
+      @date = ((params[:date].to_date || Time.now) - BackwardsTime).to_date
     rescue
-      @date = Time.now.to_date
+      @date = (Time.now - BackwardsTime).to_date
     end
     @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
   end
@@ -36,7 +36,7 @@ class DailiesController < ApplicationController
   def update
     @daily = Daily.daily.find(params[:id])
     if @daily.update(daily_params)
-      @date = Time.now.to_date
+      @date = (Time.now.to_date - BackwardsTime).to_date
       @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
@@ -48,7 +48,7 @@ class DailiesController < ApplicationController
     @daily = Daily.new daily_params
     @daily.user_id = current_user.id
     if @daily.save
-      @date = Time.now.to_date
+      @date = (Time.now.to_date - BackwardsTime).to_date
       @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
