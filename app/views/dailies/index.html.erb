@@ -10,8 +10,8 @@
           <h3><%= daily.user.name %>&nbsp;&nbsp;<small><%= daily.created_at.to_s.split(" ")[1] %></small></h3>
           <h4><%= daily.title%></h4>
           <p><%= $markdown.render(daily.content).html_safe %></p>
-          <!-- <hr>
-          <span class="glyphicon glyphicon-thumbs-up"></span>
+          <hr>
+          <!-- <span class="glyphicon glyphicon-thumbs-up"></span>
           <span class="pull-right glyphicon glyphicon-heart-empty"></span>
           <div class="input-group">
             <input name="date" placeholder="评论" class="form-control">
