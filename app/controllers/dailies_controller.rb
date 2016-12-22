@@ -13,7 +13,7 @@ class DailiesController < ApplicationController
 
   def index
     begin
-      @date = ((params[:date].to_date || Time.now) - BackwardsTime).to_date
+      @date = params[:date].to_date || (Time.now - BackwardsTime).to_date
     rescue
       @date = (Time.now - BackwardsTime).to_date
     end
@@ -21,7 +21,7 @@ class DailiesController < ApplicationController
   end
 
   def new
-    @daily = Daily.daily.where(user_id: current_user.id, created_at: (Time.now.to_date.beginning_of_day + BackwardsTime)..(Time.now.to_date.end_of_day + BackwardsTime)).first
+    @daily = Daily.daily.where(user_id: current_user.id, created_at: (Time.now.beginning_of_day + BackwardsTime)..(Time.now.end_of_day + BackwardsTime)).first
     if @daily
       render 'edit'
     else
@@ -30,13 +30,13 @@ class DailiesController < ApplicationController
   end
 
   def edit
-  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: (Time.now.to_date.beginning_of_day + BackwardsTime)..(Time.now.to_date.end_of_day + BackwardsTime)).first
+  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: (Time.now.beginning_of_day + BackwardsTime)..(Time.now.end_of_day + BackwardsTime)).first
 	end
 
   def update
     @daily = Daily.daily.find(params[:id])
     if @daily.update(daily_params)
-      @date = (Time.now.to_date - BackwardsTime).to_date
+      @date = (Time.now - BackwardsTime).to_date
       @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
@@ -48,7 +48,7 @@ class DailiesController < ApplicationController
     @daily = Daily.new daily_params
     @daily.user_id = current_user.id
     if @daily.save
-      @date = (Time.now.to_date - BackwardsTime).to_date
+      @date = (Time.now - BackwardsTime).to_date
       @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
       render 'index'
     else
