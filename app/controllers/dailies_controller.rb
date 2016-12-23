@@ -3,6 +3,14 @@ class DailiesController < ApplicationController
 
   BackwardsTime = 6.hours
 
+  def time_range date = @date || default_date
+    (date.beginning_of_day + BackwardsTime)..(date.end_of_day + BackwardsTime)
+  end
+
+  def default_date
+    (Time.now - BackwardsTime).to_date
+  end
+
   def goals
     time = Time.now
     @month_goals = Daily.month_goal.where(goal_info: "#{time.year}-#{time.month}").order(created_at: :desc)
@@ -13,15 +21,15 @@ class DailiesController < ApplicationController
 
   def index
     begin
-      @date = params[:date].to_date || (Time.now - BackwardsTime).to_date
+      @date = params[:date].to_date || default_date
     rescue
-      @date = (Time.now - BackwardsTime).to_date
+      @date = default_date
     end
-    @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
+    @dailies = Daily.daily.where(created_at: time_range).order(created_at: :desc)
   end
 
   def new
-    @daily = Daily.daily.where(user_id: current_user.id, created_at: (Time.now.beginning_of_day + BackwardsTime)..(Time.now.end_of_day + BackwardsTime)).first
+    @daily = Daily.daily.where(user_id: current_user.id, created_at: time_range).first
     if @daily
       render 'edit'
     else
@@ -30,14 +38,14 @@ class DailiesController < ApplicationController
   end
 
   def edit
-  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: (Time.now.beginning_of_day + BackwardsTime)..(Time.now.end_of_day + BackwardsTime)).first
+  	@daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: time_range).first
 	end
 
   def update
-    @daily = Daily.daily.find(params[:id])
+    @daily = Daily.daily.where(user_id: current_user.id, id: params[:id], created_at: time_range).first
     if @daily.update(daily_params)
-      @date = (Time.now - BackwardsTime).to_date
-      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
+      @date = default_date
+      @dailies = Daily.daily.where(created_at: time_range).order(created_at: :desc)
       render 'index'
     else
       render 'edit'
@@ -45,14 +53,25 @@ class DailiesController < ApplicationController
   end
 
   def create
-    @daily = Daily.new daily_params
-    @daily.user_id = current_user.id
-    if @daily.save
-      @date = (Time.now - BackwardsTime).to_date
-      @dailies = Daily.daily.where(created_at: (@date.beginning_of_day + BackwardsTime)..(@date.end_of_day + BackwardsTime)).order(created_at: :desc)
-      render 'index'
+    @daily = Daily.daily.where(user_id: current_user.id, created_at: time_range).order(created_at: :desc).first
+    if @daily
+      if @daily.update_attributes(daily_params)
+        @date = default_date
+        @dailies = Daily.daily.where(created_at: time_range).order(created_at: :desc)
+        render 'index'
+      else
+        render 'edit'
+      end
     else
-      render 'new'
+      @daily = Daily.new daily_params
+      @daily.user_id = current_user.id
+      if @daily.save
+        @date = default_date
+        @dailies = Daily.daily.where(created_at: time_range).order(created_at: :desc)
+        render 'index'
+      else
+        render 'new'
+      end
     end
   end
 

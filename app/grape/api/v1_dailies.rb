@@ -4,16 +4,16 @@ module API
 
     helpers do
       def daily
-        Daily.find_by(id: params[:id]) || error!({error: "daily not found"}, 404)
+        Daily.find_by(id: params[:id]) || error!({errors: "daily not found"}, 404)
       end
 
       def my_today_daily
-        current_user.dailies.find_by(id: params[:id], created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day) || error!({error: "daily not found"}, 404)
+        current_user.dailies.find_by(id: params[:id], created_at: Time.now.to_date.beginning_of_day..Time.now.to_date.end_of_day) || error!({errors: "daily not found"}, 404)
       end
     end
 
     before do
-      error!({error: 'have no permission'}, 403) unless current_user.has_perm? :daily
+      error!({errors: 'have no permission'}, 403) unless current_user.has_perm? :daily
     end
 
     resource :dailies do
