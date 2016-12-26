@@ -15,7 +15,7 @@ class Daily < ActiveRecord::Base
   validates :title, presence: true
   validates :content, presence: true
 
-  scope :daily, -> {where(spec_type: 1)}
+  scope :daily, -> { where(spec_type: 1) }
   scope :month_goal, -> { where(:spec_type => 2) }
   scope :quarter_goal, -> { where(:spec_type => 3) }
   scope :year_goal, -> { where(:spec_type => 4) }

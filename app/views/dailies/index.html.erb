@@ -6,10 +6,22 @@
         <h1 class="text-center">
           <%= "#{@date}日报" %>
         </h1>
+        <hr>
         <% @dailies.each do |daily| %>
           <h3><%= daily.user.name %>&nbsp;&nbsp;<small><%= daily.created_at.to_s.split(" ")[1] %></small></h3>
           <h4><%= daily.title%></h4>
           <p><%= $markdown.render(daily.content).html_safe %></p>
+          <!-- <div class="pull-right dropdown">
+            <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">评论<span class="caret"></span></button>
+        		<ul class="dropdown-menu">
+        			<li>
+                <%= link_to "修改密码", edit_user_registration_path %>
+              </li>
+              <li>
+                <%= link_to '退出', destroy_user_session_path, :method => :delete %>
+              </li>
+        		</ul>
+        	</div> -->
           <hr>
           <!-- <span class="glyphicon glyphicon-thumbs-up"></span>
           <span class="pull-right glyphicon glyphicon-heart-empty"></span>
