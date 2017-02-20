@@ -4,6 +4,7 @@
       <div class="modal-header">
         <h1 class="text-center">Phantom Daily</h1>
       </div>
+      <%= devise_error_messages! %>
       <div class="modal-body">
         <%= form_for(resource, as: resource_name, class: "form col-md-12 center-block", url: session_path(resource_name)) do |f| %>
           <div class="form-group">
@@ -12,11 +13,20 @@
           <div class="form-group">
             <%= f.password_field :password, :placeholder => "请输入密码", class: "form-control input-lg" %>
           </div>
+            <% if flash[:notice] %>
+                <p class="alert"><%= flash[:notice] %></p>
+            <% end %>
+            <% if flash[:alert] %>
+                <div class="alert alert-danger">
+                  <a href="#" class="alert-link">Invalid Email or password</a>
+                </div>
+            <% end %>
           <div class="form-group">
             <%= f.submit "登录", class: "btn btn-primary btn-lg btn-block" %>
             <span class="pull-right"><a href="sign_up">注册</a></span><span><a href="edit">修改密码</a></span>
           </div>
         <% end %>
+
       </div>
       <div class="modal-footer"></div>
     </div>
